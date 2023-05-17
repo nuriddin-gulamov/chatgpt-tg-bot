@@ -18,6 +18,8 @@ bot.help((ctx) => ctx.reply(messages.helpMessage));
 bot.on("message", async (ctx) => {
   const message = ctx.message.text;
 
+  ctx.replyWithChatAction("typing");
+
   const gptResponse = await OpenAI.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [{ role: "user", content: message }],
@@ -28,3 +30,6 @@ bot.on("message", async (ctx) => {
 });
 
 bot.launch();
+
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
